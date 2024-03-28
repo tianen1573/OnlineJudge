@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <ctemplate/template.h>
 
 #include "../comm/log.hpp"
@@ -20,8 +21,23 @@ namespace ns_view
     class View
     {
     public:
-        View(){}
-        ~View(){}
+        View() {}
+        ~View() {}
+
+        /**
+         * @brief 根据难度设置标签颜色
+         * 
+         */
+        std::string StarToColor(const std::string &star)
+        {
+            const std::unordered_map<std::string, std::string> sc = {
+                {"简单", "<span style = \"color:green\">"},
+                {"中等", "<span style = \"color:yellow\">"},
+                {"困难", "<span style = \"color:red\">"}
+                };
+            
+            return sc.at(star);
+        }
 
         /**
          * @brief 渲染题目列表网页
@@ -41,7 +57,7 @@ namespace ns_view
                 ctemplate::TemplateDictionary *sub = root.AddSectionDictionary("questionsList");
                 sub->SetValue("number", ques.number);
                 sub->SetValue("title", ques.title);
-                sub->SetValue("star", "<p style = \"color:red\">" + ques.star + "</p>");
+                sub->SetValue("star", StarToColor(ques.star) + ques.star + "</span>");
             }
             // 3. 获取待渲染网页
             ctemplate::Template *tpl = ctemplate::Template::GetTemplate(srcHtml, ctemplate::DO_NOT_STRIP);
@@ -62,14 +78,13 @@ namespace ns_view
             ctemplate::TemplateDictionary root("oneQuestion");
             root.SetValue("number", ques.number);
             root.SetValue("title", ques.title);
-            root.SetValue("star", ques.star);
+            root.SetValue("star", StarToColor(ques.star) + ques.star + "</span>");
             root.SetValue("desc", ques.desc);
             root.SetValue("header", ques.header);
             // 3. 获取待渲染网页
             ctemplate::Template *tpl = ctemplate::Template::GetTemplate(srcHtml, ctemplate::DO_NOT_STRIP);
             // 4. 渲染网页
             tpl->Expand(outHtml, &root);
-
         }
     };
 }

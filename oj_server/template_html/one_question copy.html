@@ -29,7 +29,6 @@
         body {
             width: 100%;
             height: 100%;
-            background-color: #F0F0F0;
         }
 
         /* 导航栏 */
@@ -66,17 +65,14 @@
             /* 设置a标签中的文字居中 */
             text-align: center;
         }
-
         /* 设置鼠标悬浮事件 */
         .container .navbar a:hover {
             background-color: #F2F2F2;
         }
-
         /* 登陆组件靠右 */
         .container .navbar .login {
             float: right;
         }
-
         /* 导航栏中的搜索框 外部 */
         .container .navbar .searchBox {
             position: absolute;
@@ -92,7 +88,6 @@
             align-items: center;
             justify-content: center;
         }
-
         /* 导航栏中的搜索框 内部 */
         .container .navbar .search {
             float: right;
@@ -112,7 +107,6 @@
             margin-right: 10px;
             justify-content: center;
         }
-
         /* 导航栏中的搜索框 输入 */
         .container .navbar .search .input-box {
             display: inline-block;
@@ -120,7 +114,6 @@
             outline: none;
             width: 220px;
         }
-
         /* 导航栏中的搜索框 按钮 */
         .container .navbar .search .button {
             display: inline-block;
@@ -137,41 +130,18 @@
             /* 可选，防止背景图像重复 */
 
         }
-
+        
         .container .part1 {
-            margin-top: 10px;
             width: 100%;
             height: 600px;
             overflow: hidden;
-            display: flex;
-        }
-
-        .container .part1 .resize-handle {
-            background-color: transparent;
-            width: 10px;
-            cursor: col-resize;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container .part1 .resize-handle:hover {
-            background-color: #E3E3E6;
-        }
-
-        .container .part1 .resize-handle::before {
-            content: "";
-            width: 60%;
-            height: 20px;
-            background-color: black;
         }
 
         .container .part1 .left_desc {
-            background-color: #FFFFFF;
             width: 50%;
             height: 600px;
-            overflow: hidden;
+            float: left;
+            overflow: scroll;
         }
 
         .container .part1 .left_desc h3 {
@@ -183,18 +153,17 @@
             padding-top: 10px;
             padding-left: 10px;
             font-size: medium;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
 
         .container .part1 .right_code {
             width: 50%;
-            height: 600px;
+            float: right;
         }
 
         .container .part1 .right_code .ace_editor {
             height: 600px;
         }
-
         .container .part2 {
             width: 100%;
             overflow: hidden;
@@ -218,9 +187,8 @@
             margin-top: 10px;
             margin-right: 10px;
         }
-
         .container .part2 button:hover {
-            color: green;
+            color:green;
         }
 
         .container .part2 .result {
@@ -251,12 +219,11 @@
         </div>
         <!-- 左右呈现，题目描述和预设代码 -->
         <div class="part1">
-            <div class="left_desc" id="left_desc">
+            <div class="left_desc">
                 <h3><span id="number">{{number}}</span>:【{{star}}】{{title}}</h3>
                 <pre>{{desc}}</pre>
             </div>
-            <div class="resize-handle"></div>
-            <div class="right_code" id="right_code">
+            <div class="right_code">
                 <pre id="code" class="ace_editor"><textarea class="ace_text-input">{{header}}</textarea></pre>
             </div>
         </div>
@@ -266,56 +233,6 @@
             <button class="btn-submit" onclick="submit()">提交代码</button>
         </div>
     </div>
-    <script>
-        const component1 = document.getElementById('left_desc');
-        const component2 = document.getElementById('right_code');
-        const resizeHandle = document.querySelector('.resize-handle');
-        let isResizing = false;
-        let startX;
-        let startWidth;
-
-        resizeHandle.addEventListener('mousedown', startResize);
-        window.addEventListener('mouseup', stopResize);
-        window.addEventListener('mousemove', resize);
-
-        function startResize(e) {
-            isResizing = true;
-            startX = e.clientX;
-            startWidth = component1.offsetWidth;
-        }
-
-        function stopResize() {
-            isResizing = false;
-        }
-
-        function resize(e) {
-        if (!isResizing) return;
-        const diffX = e.clientX - startX;
-        const newWidth = startWidth + diffX;
-        const containerWidth = component1.parentNode.offsetWidth;
-        const minWidth = containerWidth * 0.3; // 最小宽度为容器宽度的30%
-
-        if (newWidth > minWidth) {
-            component1.style.flexBasis = `${newWidth / containerWidth * 100}%`;
-            component2.style.flexBasis = `${100 - newWidth / containerWidth * 100}%`;
-        } else if (newWidth <= minWidth && component1.style.flexBasis !== '0%') {
-            component1.style.flexBasis = '0%';
-            component2.style.flexBasis = '100%';
-        }
-
-        // 当 component1 大小为 0% 时，点击 resize-handle 后将其大小变为 30%
-        if (component1.style.flexBasis === '0%') {
-            resizeHandle.addEventListener('click', setComponent1Size);
-        } else {
-            resizeHandle.removeEventListener('click', setComponent1Size);
-        }
-    }
-
-    function setComponent1Size() {
-        component1.style.flexBasis = '30%';
-        component2.style.flexBasis = '70%';
-    }
-    </script>
     <script>
         //初始化对象
         editor = ace.edit("code");
@@ -341,7 +258,8 @@
             enableLiveAutocompletion: true
         });
 
-        function submit() {
+        function submit(){
+            // alert("嘿嘿!");
             // 1. 收集当前页面的有关数据, 1. 题号 2.代码
             var code = editor.getSession().getValue();
             // console.log(code);
@@ -356,17 +274,18 @@
                 dataType: 'json', // 告知server，我需要什么格式
                 contentType: 'application/json;charset=utf-8',  // 告知server，我给你的是什么格式
                 data: JSON.stringify({
-                    'code': code,
+                    'code':code,
                     'input': ''
                 }),
-                success: function (data) {
+                success: function(data){
                     //成功得到结果
                     // console.log(data);
                     show_result(data);
                 }
             });
             // 3. 得到结果，解析并显示到 result中
-            function show_result(data) {
+            function show_result(data)
+            {
                 // console.log(data.status);
                 // console.log(data.reason);
                 // 拿到result结果标签
@@ -378,12 +297,12 @@
                 var _status = data.status;
                 var _reason = data.reason;
 
-                var reason_lable = $("<p>", {
-                    text: _reason
+                var reason_lable = $( "<p>",{
+                       text: _reason
                 });
                 reason_lable.appendTo(result_div);
 
-                if (status == 0) {
+                if(status == 0){
                     // 请求是成功的，编译运行过程没出问题，但是结果是否通过看测试用例的结果
                     var _stdout = data.stdout;
                     var _stderr = data.stderr;
@@ -399,7 +318,7 @@
                     stdout_lable.appendTo(result_div);
                     stderr_lable.appendTo(result_div);
                 }
-                else {
+                else{
                     // 编译运行出错,do nothing
                 }
             }

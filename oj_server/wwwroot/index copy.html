@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tianen OJ</title>
+    <title>这是我的个人OJ系统</title>
     <style>
+        /* 起手式, 100%保证我们的样式设置可以不受默认影响 */
         * {
             /* 消除网页的默认外边距 */
             margin: 0px;
@@ -20,29 +21,21 @@
             height: 100%;
         }
 
-        /* 导航栏样式 */
         .container .navbar {
-            /* 宽 和网页一样宽*/
-            width: calc(100% - 80px);
-            /* 高 */
+            width: 100%;
             height: 50px;
-            /* 背景颜色 */
-            background-color: #FFFFFF;
-            /* 下划线样式 */
-            border-bottom: 1px solid #EBEBEB;
-            /* 外边距 */
-            padding: 0 40px;
+            background-color: black;
             /* 给父级标签设置overflow，取消后续float带来的影响 */
             overflow: hidden;
         }
 
-        /* 导航栏中的a标签 */
         .container .navbar a {
-            /* 设置a标签是行内块元素*/
+            /* 设置a标签是行内块元素，允许你设置宽度 */
             display: inline-block;
+            /* 设置a标签的宽度,a标签默认行内元素，无法设置宽度 */
             width: 80px;
             /* 设置字体颜色 */
-            color: #676767;
+            color: white;
             /* 设置字体的大小 */
             font-size: large;
             /* 设置文字的高度和导航栏一样的高度 */
@@ -52,112 +45,12 @@
             /* 设置a标签中的文字居中 */
             text-align: center;
         }
-
         /* 设置鼠标事件 */
-        /* 悬浮 */
         .container .navbar a:hover {
-            background-color: #F2F2F2;
+            background-color: green;
         }
-
-        /* 导航栏中的搜索框 */
-        .container .navbar .search-container {
-            /* align-items: center; */
-
-            height: 50px;
-            width: 250px;
-            background-color: #FFFFFF;
-
-            /* border: 1px solid #85B7D9; */
-
-            /* border-radius: 15px; */
-            /* padding: 9px; */
-
+        .container .navbar .login {
             float: right;
-        }
-
-        /* .container .navbar .search-container #searchInput {
-            flex: 1;
-            border: none;
-            background: transparent;
-            outline: none;
-            font-size: 14px;
-            color: #333;
-        } */
-
-        .container .navbar  input {
-            /* 设置a标签是行内块元素，允许你设置宽度 */
-            display: inline-block;
-            /* 设置a标签的宽度,a标签默认行内元素，无法设置高度 */
-            width: 180px;
-            /* 设置字体颜色 */
-            color: #333;
-            /* 设置字体的大小 */
-            font-size: large;
-            /* 设置文字的高度和导航栏一样的高度 */
-            line-height: 30px;
-            /* 去掉标签的下划线 */
-            text-decoration: none;
-            border: 1px solid #85B7D9;
-            border-radius: 15px;
-            /* 设置标签中的文字居中 */
-            text-align: center;
-
-            flex: 1;
-            background: transparent;
-            outline: none;
-        }
-
-
-        /* .container .navbar .search-container #searchButton {
-            border: none;
-            background: transparent;
-            cursor: pointer;
-        } */
-        .container .navbar button {
-           /* 设置a标签是行内块元素，允许你设置宽度 */
-           display: inline-block;
-            /* 设置a标签的宽度,a标签默认行内元素，无法设置高度 */
-            width: 180px;
-            /* 设置字体颜色 */
-            color: #333;
-            /* 设置字体的大小 */
-            font-size: large;
-            /* 设置文字的高度和导航栏一样的高度 */
-            line-height: 30px;
-            /* 去掉标签的下划线 */
-            text-decoration: none;
-            border: 1px solid #85B7D9;
-            border-radius: 15px;
-            /* 设置标签中的文字居中 */
-            text-align: center;
-
-            flex: 1;
-            background: transparent;
-            outline: none;
-        }
-
-        .container .navbar .search-container .icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            /* background: black; */
-            background-image: url("a/images/300.jpg");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
-
-        .container .content {
-            /* 设置标签的宽度 */
-            width: 800px;
-            /* 用来调试 */
-            /* background-color: #ccc; */
-            /* 整体居中 */
-            margin: 0px auto;
-            /* 设置文字居中 */
-            text-align: center;
-            /* 设置上外边距 */
-            margin-top: 200px;
         }
 
         .container .content {
@@ -192,31 +85,17 @@
         <div class="navbar">
             <a href="/">首页</a>
             <a href="/all_questions">题库</a>
-            <a href="#">历史</a>
+            <a href="#">竞赛</a>
+            <a href="#">讨论</a>
+            <a href="#">求职</a>
             <a class="login" href="#">登录</a>
-            <input type="text" placeholder="题目编号">
-            <button>提交</button>
-            <div class="search-container">
-                <input type="text" placeholder="题目编号">
-                <button>提</button>
-            </div>
         </div>
         <!-- 网页的内容 -->
-
         <div class="content">
-            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
-            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
-            <img src="/images/300.jpg" alt="背景图片">
-        </div>
-        <div class="content">
-            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
+            <h1 class="font_">欢迎来到我的OnlineJudge平台</h1>
+            <p class="font_">这个我个人独立开发的一个在线OJ平台</p>
             <a class="font_" href="/all_questions">点击我开始编程啦!</a>
         </div>
-        <div class="content">
-            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
-            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
-        </div>
-
     </div>
 </body>
 
