@@ -29,6 +29,7 @@
         body {
             width: 100%;
             height: 100%;
+            background-color: #F0F0F0;
         }
 
         /* 导航栏 */
@@ -40,8 +41,8 @@
             height: 50px;
             /* 背景颜色 */
             background-color: #FFFFFF;
-            /* 下划线样式 */
-            border-bottom: 1px solid #EBEBEB;
+            /* 阴影样式 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             /* 外边距 */
             padding: 0 40px;
             /* 子组件缩略 */
@@ -65,14 +66,17 @@
             /* 设置a标签中的文字居中 */
             text-align: center;
         }
+
         /* 设置鼠标悬浮事件 */
         .container .navbar a:hover {
             background-color: #F2F2F2;
         }
+
         /* 登陆组件靠右 */
         .container .navbar .login {
             float: right;
         }
+
         /* 导航栏中的搜索框 外部 */
         .container .navbar .searchBox {
             position: absolute;
@@ -88,6 +92,7 @@
             align-items: center;
             justify-content: center;
         }
+
         /* 导航栏中的搜索框 内部 */
         .container .navbar .search {
             float: right;
@@ -107,6 +112,7 @@
             margin-right: 10px;
             justify-content: center;
         }
+
         /* 导航栏中的搜索框 输入 */
         .container .navbar .search .input-box {
             display: inline-block;
@@ -114,6 +120,7 @@
             outline: none;
             width: 220px;
         }
+
         /* 导航栏中的搜索框 按钮 */
         .container .navbar .search .button {
             display: inline-block;
@@ -130,18 +137,41 @@
             /* 可选，防止背景图像重复 */
 
         }
-        
+
         .container .part1 {
+            margin-top: 10px;
             width: 100%;
-            height: 600px;
+            height: 650px;
             overflow: hidden;
+            display: flex;
+        }
+
+        .container .part1 .resize-handle {
+            background-color: transparent;
+            width: 10px;
+            cursor: col-resize;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container .part1 .resize-handle:hover {
+            background-color: #E3E3E6;
+        }
+
+        .container .part1 .resize-handle::before {
+            content: "";
+            width: 60%;
+            height: 20px;
+            background-color: black;
         }
 
         .container .part1 .left_desc {
+            background-color: #FFFFFF;
             width: 50%;
-            height: 600px;
-            float: left;
-            overflow: scroll;
+            height: 100%;
+            overflow: auto;
         }
 
         .container .part1 .left_desc h3 {
@@ -153,17 +183,18 @@
             padding-top: 10px;
             padding-left: 10px;
             font-size: medium;
-            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
 
         .container .part1 .right_code {
             width: 50%;
-            float: right;
+            height: 100%;
         }
 
         .container .part1 .right_code .ace_editor {
-            height: 600px;
+            height: 100%;
         }
+
         .container .part2 {
             width: 100%;
             overflow: hidden;
@@ -182,13 +213,14 @@
             background-color: #26bb9c;
             color: #FFF;
             /* 给按钮带上圆角 */
-            /* border-radius: 1ch; */
+            border-radius: 5ch;
             border: 0px;
             margin-top: 10px;
             margin-right: 10px;
         }
+
         .container .part2 button:hover {
-            color:green;
+            color: green;
         }
 
         .container .part2 .result {
@@ -212,18 +244,19 @@
             <a class="login" href="#">登录</a>
             <div class="searchBox">
                 <div class="search">
-                    <button class="button"></button>
-                    <input type="text" class="input-box" placeholder="题目编号">
+                    <button class="button" onclick="inputSubmit()"></button>
+                    <input type="text" class="input-box" id="inputSearch" placeholder="题目编号">
                 </div>
             </div>
         </div>
         <!-- 左右呈现，题目描述和预设代码 -->
         <div class="part1">
-            <div class="left_desc">
+            <div class="left_desc" id="left_desc">
                 <h3><span id="number">{{number}}</span>:【{{star}}】{{title}}</h3>
                 <pre>{{desc}}</pre>
             </div>
-            <div class="right_code">
+            <div class="resize-handle"></div>
+            <div class="right_code" id="right_code">
                 <pre id="code" class="ace_editor"><textarea class="ace_text-input">{{header}}</textarea></pre>
             </div>
         </div>
@@ -234,19 +267,68 @@
         </div>
     </div>
     <script>
+        const component1 = document.getElementById('left_desc');
+        const component2 = document.getElementById('right_code');
+        const resizeHandle = document.querySelector('.resize-handle');
+        let isResizing = false;
+        let startX;
+        let startWidth;
+
+        resizeHandle.addEventListener('mousedown', startResize);
+        window.addEventListener('mouseup', stopResize);
+        window.addEventListener('mousemove', resize);
+
+        function startResize(e) {
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = component1.offsetWidth;
+        }
+
+        function stopResize() {
+            isResizing = false;
+        }
+
+        function resize(e) {
+            if (!isResizing) return;
+            const diffX = e.clientX - startX;
+            const newWidth = startWidth + diffX;
+            const containerWidth = component1.parentNode.offsetWidth;
+            const minWidth = containerWidth * 0.3; // 最小宽度为容器宽度的30%
+
+            if (newWidth > minWidth) {
+                component1.style.flexBasis = `${newWidth / containerWidth * 100}%`;
+                component2.style.flexBasis = `${100 - newWidth / containerWidth * 100}%`;
+            } else if (newWidth <= minWidth && component1.style.flexBasis !== '0%') {
+                component1.style.flexBasis = '0%';
+                component2.style.flexBasis = '100%';
+            }
+
+            // 当 component1 大小为 0% 时，点击 resize-handle 后将其大小变为 30%
+            if (component1.style.flexBasis === '0%') {
+                resizeHandle.addEventListener('click', setComponent1Size);
+            } else {
+                resizeHandle.removeEventListener('click', setComponent1Size);
+            }
+        }
+
+        function setComponent1Size() {
+            component1.style.flexBasis = '30%';
+            component2.style.flexBasis = '70%';
+        }
+    </script>
+    <script>
         //初始化对象
         editor = ace.edit("code");
 
-        //设置风格和语言（更多风格和语言，请到github上相应目录查看）
+        // 设置风格和语言（更多风格和语言，请到github上相应目录查看）
         // 主题大全：http://www.manongjc.com/detail/25-cfpdrwkkivkikmk.html
         editor.setTheme("ace/theme/monokai");
+        // editor.setTheme("ace/theme/terminal");
         editor.session.setMode("ace/mode/c_cpp");
-
         // 字体大小
         editor.setFontSize(16);
         // 设置默认制表符的大小:
         editor.getSession().setTabSize(4);
-
         // 设置只读（true时只读，用于展示代码）
         editor.setReadOnly(false);
 
@@ -258,15 +340,11 @@
             enableLiveAutocompletion: true
         });
 
-        function submit(){
-            // alert("嘿嘿!");
-            // 1. 收集当前页面的有关数据, 1. 题号 2.代码
+        function submit() {
+            // 1. 收集当前页面的有关数据, 1. 题号 2.代码 3. 形成url
             var code = editor.getSession().getValue();
-            // console.log(code);
             var number = $(".container .part1 .left_desc h3 #number").text();
-            // console.log(number);
             var judge_url = "/judge/" + number;
-            // console.log(judge_url);
             // 2. 构建json，并通过ajax向后台发起基于http的json请求
             $.ajax({
                 method: 'Post',   // 向后端发起请求的方式
@@ -274,54 +352,85 @@
                 dataType: 'json', // 告知server，我需要什么格式
                 contentType: 'application/json;charset=utf-8',  // 告知server，我给你的是什么格式
                 data: JSON.stringify({
-                    'code':code,
-                    'input': ''
+                    'code': code,
+                    'input': ""
                 }),
-                success: function(data){
-                    //成功得到结果
-                    // console.log(data);
+                success: function (data) {
+                    // 成功得到结果
                     show_result(data);
                 }
             });
             // 3. 得到结果，解析并显示到 result中
-            function show_result(data)
-            {
-                // console.log(data.status);
-                // console.log(data.reason);
+            function show_result(data) {
                 // 拿到result结果标签
-                var result_div = $(".container .part2 .result");
+                var result_div = $(".container .part1 .left_desc");
+                // 拿到result状态标签
+                var result_st = $(".container .part2 .result");
                 // 清空上一次的运行结果
-                result_div.empty();
+                // result_div.empty();
+                result_st.empty();
 
                 // 首先拿到结果的状态码和原因结果
-                var _status = data.status;
+                var _status = data.code;
                 var _reason = data.reason;
 
-                var reason_lable = $( "<p>",{
-                       text: _reason
-                });
-                reason_lable.appendTo(result_div);
-
-                if(status == 0){
+                if (_status == 0) { // 编译成功
+                    // 清空题述
+                    result_div.empty();
                     // 请求是成功的，编译运行过程没出问题，但是结果是否通过看测试用例的结果
                     var _stdout = data.stdout;
                     var _stderr = data.stderr;
+                    var _space = "\n\n";
 
+                    var reason_lable = $("<p>", {
+                        style: "color: green",
+                        text: _reason
+                    });
                     var stdout_lable = $("<pre>", {
                         text: _stdout
                     });
-
                     var stderr_lable = $("<pre>", {
                         text: _stderr
                     })
 
+                    reason_lable.appendTo(result_st); // 状态描述
                     stdout_lable.appendTo(result_div);
+                    _space.appendTo(result_div);
                     stderr_lable.appendTo(result_div);
                 }
-                else{
-                    // 编译运行出错,do nothing
+                else if (_status == -3) {// 编译失败
+                    // 清空题述
+                    result_div.empty();
+
+                    var reason_lable = $("<p>", {
+                        style: "color: red",
+                        text: "编译失败，请查看描述!"
+                    });
+                    var errDest_lable = $("<p>", {
+                        text: _reason
+                    });
+                    reason_lable.appendTo(result_st); // 状态描述
+                    errDest_lable.appendTo(result_div);
+                }
+                else { // 其他
+
+                    var reason_lable = $("<p>", {
+                        style: "color: red",
+                        text: _reason
+                    });
+                    reason_lable.appendTo(result_st); // 状态描述
                 }
             }
+        }
+    </script>
+    <script>
+        function inputSubmit() {
+            var number = document.getElementById("inputSearch").value;
+            var htmlUrl = "/questions/" + number;
+            if ("" === number) {
+                htmlUrl = "/all_questions";
+            }
+            window.location.href = htmlUrl;
         }
     </script>
 </body>

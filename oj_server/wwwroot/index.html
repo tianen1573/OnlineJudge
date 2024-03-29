@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tianen OJ</title>
     <style>
-
         * {
             /* 消除网页的默认外边距 */
             margin: 0px;
@@ -30,8 +29,8 @@
             height: 50px;
             /* 背景颜色 */
             background-color: #FFFFFF;
-            /* 下划线样式 */
-            border-bottom: 1px solid #EBEBEB;
+            /* 阴影样式 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             /* 外边距 */
             padding: 0 40px;
             /* 子组件缩略 */
@@ -55,18 +54,22 @@
             /* 设置a标签中的文字居中 */
             text-align: center;
         }
+
         /* 设置鼠标悬浮事件 */
         .container .navbar a:hover {
             background-color: #F2F2F2;
         }
+
         /* 登陆组件靠右 */
         .container .navbar .login {
             float: right;
         }
+
         /* 首页组件背景颜色 */
         .container .navbar .index {
             background-color: #F2F2F2;
         }
+
         /* 导航栏中的搜索框 外部 */
         .container .navbar .searchBox {
             position: absolute;
@@ -82,6 +85,7 @@
             align-items: center;
             justify-content: center;
         }
+
         /* 导航栏中的搜索框 内部 */
         .container .navbar .search {
             float: right;
@@ -101,6 +105,7 @@
             margin-right: 10px;
             justify-content: center;
         }
+
         /* 导航栏中的搜索框 输入 */
         .container .navbar .search .input-box {
             display: inline-block;
@@ -108,6 +113,7 @@
             outline: none;
             width: 220px;
         }
+
         /* 导航栏中的搜索框 按钮 */
         .container .navbar .search .button {
             display: inline-block;
@@ -155,14 +161,14 @@
     <div class="container">
         <!-- 导航栏， 功能不实现-->
         <div class="navbar">
-            <a class = "index" href="/">首页</a>
+            <a class="index" href="/">首页</a>
             <a href="/all_questions">题库</a>
             <a href="#">历史</a>
             <a class="login" href="#">登录</a>
             <div class="searchBox">
                 <div class="search">
-                    <button class="button"></button>
-                    <input type="text" class="input-box" placeholder="题目编号">
+                    <button class="button" onclick="inputSubmit()"></button>
+                    <input type="text" class="input-box" id="inputSearch" placeholder="题目编号">
                 </div>
             </div>
         </div>
@@ -171,20 +177,18 @@
             <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
             <a class="font_" href="/all_questions">点击我开始编程啦!</a>
         </div>
-        <div class="content">
-            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
-            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
-        </div>
-        <div class="content">
-            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
-            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
-        </div>
-        <div class="content">
-            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
-            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
-        </div>
-
     </div>
+
+    <script>
+        function inputSubmit() {
+            var number = document.getElementById("inputSearch").value;
+            var htmlUrl = "/questions/" + number;
+            if ("" === number) {
+                htmlUrl = "/all_questions";
+            }
+            window.location.href = htmlUrl;
+        }
+    </script>
 </body>
 
 </html>

@@ -5,7 +5,8 @@
 
 void Test1()
 {
-    bool ret = Solution().isPalindromeString("aaabbaaa");
+    Solution t;
+    bool ret = t.isPalindromeString("aaabbaaa");
     if(true == ret)
     {
         std::cout << "用例1通过，测试用例：aaabbaaa" << std::endl;
@@ -17,7 +18,8 @@ void Test1()
 }
 void Test2()
 {
-    bool ret = Solution().isPalindromeString("abaa");
+    Solution t;
+    bool ret = t.isPalindromeString("abaa");
     if(false == ret)
     {
         std::cout << "用例2通过，测试用例：abaa" << std::endl;

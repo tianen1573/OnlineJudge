@@ -31,9 +31,9 @@ namespace ns_view
         std::string StarToColor(const std::string &star)
         {
             const std::unordered_map<std::string, std::string> sc = {
-                {"简单", "<span style = \"color:green\">"},
-                {"中等", "<span style = \"color:yellow\">"},
-                {"困难", "<span style = \"color:red\">"}
+                {"简单", "<span style = \"color:#40AF9B\">"},
+                {"中等", "<span style = \"color:#FDB800\">"},
+                {"困难", "<span style = \"color:#FF2D55\">"}
                 };
             
             return sc.at(star);

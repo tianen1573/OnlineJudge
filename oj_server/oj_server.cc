@@ -45,6 +45,7 @@ int main()
     svr.Post(R"(/judge/(\d+))", [&ctrl](const Request &req, Response &resp){
         std::string number = req.matches[1]; // 能够获取到正则表达式\d+的内容
         std::string resultJson;
+        std::cout << req.body << std::endl;
         ctrl.Judge(number, req.body, &resultJson);
         resp.set_content(resultJson, "application/json; charset=utf-8");
     });

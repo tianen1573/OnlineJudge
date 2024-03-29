@@ -26,7 +26,7 @@ namespace ns_control
 
     const std::string banCodePath = "questions/banCode.cpp";
     const std::string serviceMachinePath = "conf/service_machine.conf"; // oj_server/conf/service_machine.conf
-    class Machine                                                         // 主机
+    class Machine                                                       // 主机
     {
     public:
         Machine()
@@ -107,11 +107,13 @@ namespace ns_control
          */
         void ResetLoad()
         {
-            if(_mtx) _mtx->lock();
+            if (_mtx)
+                _mtx->lock();
 
             _load = 0;
 
-            if(_mtx) _mtx->unlock();
+            if (_mtx)
+                _mtx->unlock();
         }
 
     private:
@@ -278,7 +280,7 @@ namespace ns_control
     class Control
     {
     public:
-        Control() 
+        Control()
         {
             assert(FileUtil::ReadFile(banCodePath, &_banCode, true));
         }
@@ -298,9 +300,8 @@ namespace ns_control
                 return false;
             }
 
-            std::sort(allQues.begin(), allQues.end(), [](const struct Question &q1, const struct Question &q2){
-                return std::atoi(q1.number.c_str()) < std::atoi(q2.number.c_str());
-            });
+            std::sort(allQues.begin(), allQues.end(), [](const struct Question &q1, const struct Question &q2)
+                      { return std::atoi(q1.number.c_str()) < std::atoi(q2.number.c_str()); });
             _view.AllQuestionsExpandHtml(allQues, html);
 
             return true;
@@ -316,7 +317,20 @@ namespace ns_control
             if (!_model.GetOneQuestion(number, &ques))
             {
                 LOG(ERROR) << "获取题目失败：" << number << std::endl;
-                *html = "指定题目不存在";
+                if (!FileUtil::ReadFile("./wwwroot/404.html", html))
+                {
+                    *html = R"(<!DOCTYPE html> 
+                    <html lang="en">
+                    <head>
+                    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+                    <title>404 Not Found</title>
+                    </head>
+                    <body>
+                    <h1>404 Not Found</h1>
+                    <p>Sorry, the page you are looking for does not exist.</p>
+                    </body>
+                    </html>)";
+                }
                 return false;
             }
 
@@ -349,7 +363,10 @@ namespace ns_control
             // 2. 拼接代码
             Json::Value compileVal;
             compileVal["input"] = inVal["input"].asString();
-            compileVal["code"] = _banCode + inVal["code"].asString() + ques.tail;
+            if (!inVal["code"].asString().empty())
+            {
+                compileVal["code"] = _banCode + inVal["code"].asString() + ques.tail;
+            }
             compileVal["cpuLimit"] = ques.cpuLimit;
             compileVal["memLimit"] = ques.memLimit;
             Json::FastWriter writer;
@@ -398,6 +415,7 @@ namespace ns_control
         {
             _loadBlance.OnlineMachine();
         }
+
     private:
         Model _model;
         View _view;

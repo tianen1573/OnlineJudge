@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+    <style>
+
+
+* {
+            /* 消除网页的默认外边距 */
+            margin: 0px;
+            /* 消除网页的默认内边距 */
+            padding: 0px;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 导航栏 */
+        /* 导航栏样式 */
+        .navbar {
+            /* 宽 和网页一样宽*/
+            width: calc(100% - 80px);
+            /* 高 */
+            height: 50px;
+            /* 背景颜色 */
+            background-color: #FFFFFF;
+            /* 阴影样式 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            /* 外边距 */
+            padding: 0 40px;
+            /* 子组件缩略 */
+            overflow: hidden;
+        }
+
+        /* 导航栏中的a标签 */
+        .navbar a {
+            /* 设置a标签是行内块元素*/
+            display: inline-block;
+            /* 设置宽度 */
+            width: 80px;
+            /* 设置字体颜色 */
+            color: #676767;
+            /* 设置字体的大小 -- 比父组件的稍大一些 */
+            font-size: large;
+            /* 设置和导航栏一样的高度 */
+            line-height: 50px;
+            /* 去掉a标签的下划线 */
+            text-decoration: none;
+            /* 设置a标签中的文字居中 */
+            text-align: center;
+        }
+
+        /* 设置鼠标悬浮事件 */
+        .navbar a:hover {
+            background-color: #F2F2F2;
+        }
+
+        /* 登陆组件靠右 */
+        .navbar .login {
+            float: right;
+        }
+
+        /* 首页组件背景颜色 */
+        .navbar .index {
+            background-color: #F2F2F2;
+        }
+
+        .notfound {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .notfound h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .notfound p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .notfound a {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a class="index" href="/">首页</a>
+        <a href="/all_questions">题库</a>
+        <a href="#">历史</a>
+        <a class="login" href="#">登录</a>
+    </div>
+    <div class="notfound">
+        <h1>404 Not Found</h1>
+        <p>Sorry, the page you are looking for does not exist.</p>
+        <p>Please check the URL or go back to the <a href="/">homepage</a>.</p>
+    </div>
+
+</body>
+</html>

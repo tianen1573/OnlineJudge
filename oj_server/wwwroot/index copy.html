@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>这是我的个人OJ系统</title>
+    <title>Tianen OJ</title>
     <style>
-        /* 起手式, 100%保证我们的样式设置可以不受默认影响 */
         * {
             /* 消除网页的默认外边距 */
             margin: 0px;
@@ -21,36 +20,115 @@
             height: 100%;
         }
 
+        /* 导航栏 */
+        /* 导航栏样式 */
         .container .navbar {
-            width: 100%;
+            /* 宽 和网页一样宽*/
+            width: calc(100% - 80px);
+            /* 高 */
             height: 50px;
-            background-color: black;
-            /* 给父级标签设置overflow，取消后续float带来的影响 */
+            /* 背景颜色 */
+            background-color: #FFFFFF;
+            /* 阴影样式 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            /* 外边距 */
+            padding: 0 40px;
+            /* 子组件缩略 */
             overflow: hidden;
         }
 
+        /* 导航栏中的a标签 */
         .container .navbar a {
-            /* 设置a标签是行内块元素，允许你设置宽度 */
+            /* 设置a标签是行内块元素*/
             display: inline-block;
-            /* 设置a标签的宽度,a标签默认行内元素，无法设置宽度 */
+            /* 设置宽度 */
             width: 80px;
             /* 设置字体颜色 */
-            color: white;
-            /* 设置字体的大小 */
+            color: #676767;
+            /* 设置字体的大小 -- 比父组件的稍大一些 */
             font-size: large;
-            /* 设置文字的高度和导航栏一样的高度 */
+            /* 设置和导航栏一样的高度 */
             line-height: 50px;
             /* 去掉a标签的下划线 */
             text-decoration: none;
             /* 设置a标签中的文字居中 */
             text-align: center;
         }
-        /* 设置鼠标事件 */
+
+        /* 设置鼠标悬浮事件 */
         .container .navbar a:hover {
-            background-color: green;
+            background-color: #F2F2F2;
         }
+
+        /* 登陆组件靠右 */
         .container .navbar .login {
             float: right;
+        }
+
+        /* 首页组件背景颜色 */
+        .container .navbar .index {
+            background-color: #F2F2F2;
+        }
+
+        /* 导航栏中的搜索框 外部 */
+        .container .navbar .searchBox {
+            position: absolute;
+            top: 0;
+            left: 40%;
+            width: 250px;
+            height: 50px;
+
+            /* 外边距 */
+            padding: 0 0px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 导航栏中的搜索框 内部 */
+        .container .navbar .search {
+            float: right;
+            width: 248px;
+            height: 40px;
+
+            /* 外边距 */
+            padding: 0 10px;
+
+            /* 下划线样式 */
+            border: 1px solid #85B7D9;
+            /* 圆角 */
+            border-radius: 15px;
+
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            justify-content: center;
+        }
+
+        /* 导航栏中的搜索框 输入 */
+        .container .navbar .search .input-box {
+            display: inline-block;
+            border: none;
+            outline: none;
+            width: 220px;
+        }
+
+        /* 导航栏中的搜索框 按钮 */
+        .container .navbar .search .button {
+            display: inline-block;
+            border: none;
+            outline: none;
+            height: 20px;
+            width: 20px;
+            margin-right: 10px;
+
+            background-image: url("/images/findIcon.jpg");
+            background-size: cover;
+            /* 可选，调整背景图像的大小以适应按钮 */
+            background-repeat: no-repeat;
+            /* 可选，防止背景图像重复 */
+
         }
 
         .container .content {
@@ -83,20 +161,47 @@
     <div class="container">
         <!-- 导航栏， 功能不实现-->
         <div class="navbar">
-            <a href="/">首页</a>
+            <a class="index" href="/">首页</a>
             <a href="/all_questions">题库</a>
-            <a href="#">竞赛</a>
-            <a href="#">讨论</a>
-            <a href="#">求职</a>
+            <a href="#">历史</a>
             <a class="login" href="#">登录</a>
+            <div class="searchBox">
+                <div class="search">
+                    <button class="button" onclick="inputSubmit()"></button>
+                    <input type="text" class="input-box" id="inputSearch" placeholder="题目编号">
+                </div>
+            </div>
         </div>
         <!-- 网页的内容 -->
         <div class="content">
-            <h1 class="font_">欢迎来到我的OnlineJudge平台</h1>
-            <p class="font_">这个我个人独立开发的一个在线OJ平台</p>
+            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
             <a class="font_" href="/all_questions">点击我开始编程啦!</a>
         </div>
+        <div class="content">
+            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
+            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
+        </div>
+        <div class="content">
+            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
+            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
+        </div>
+        <div class="content">
+            <h1 class="font_">欢迎来到Tianen OnlineJudge平台</h1>
+            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
+        </div>
+
     </div>
+
+    <script>
+        function inputSubmit() {
+            var number = document.getElementById("inputSearch").value;
+            var htmlUrl = "/questions/" + number;
+            if ("" === number) {
+                htmlUrl = "/all_questions";
+            }
+            window.location.href = htmlUrl;
+        }
+    </script>
 </body>
 
 </html>

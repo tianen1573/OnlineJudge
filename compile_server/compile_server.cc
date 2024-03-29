@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
                  }
              });
 
+    LOG(INFO) << "编译服务启动成功，端口号为：" << argv[1] << std::endl;
     svr.listen("0.0.0.0", atoi(argv[1])); // 启动http服务
 
     return 0;

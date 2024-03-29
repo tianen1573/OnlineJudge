@@ -51,7 +51,8 @@ namespace ns_compiler {
 
                     // g++ -o target src -std=c++11
                     // COMPILER_ONLINE 传入宏用于取消包含头文件
-                    // -Werror=return-type 强制return语句
+                    // -Werror=return-type 强制代码存在return语句,否则报错
+                    // -Wfatal-errors 当遇到错误时，停止编译，避免泄露不必要的信息
                     execlp("g++", \
                     "g++", \
                      "-o",  \
@@ -60,6 +61,7 @@ namespace ns_compiler {
                      "-D", \
                      "COMPILER_ONLINE", \
                      "-Werror=return-type", \
+                     "-Wfatal-errors", \
                      "-std=c++11", \
                      nullptr);
                     
