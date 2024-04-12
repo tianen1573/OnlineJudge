@@ -9,7 +9,8 @@
 
 #include "../comm/log.hpp"
 #include "../comm/util.hpp"
-#include "./mysqlInclude/mysql.h"
+#include "../include/mysqlInclude/mysql.h"
+#include "../comm/mysqlConnectPool.hpp"
 
 
 namespace ns_model

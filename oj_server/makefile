@@ -1,5 +1,6 @@
 oj_server:oj_server.cc
-	g++ -o $@ $^ -I./mysqlInclude -L./mysqlLib -std=c++11 -lpthread -lctemplate -ljsoncpp -lmysqlclient
+	g++ -o $@ $^  -std=c++11 -lpthread -lctemplate -ljsoncpp \
+	-L../lib/mysqlLib -lmysqlclient -L../lib/mysqlcppLib -lmysqlcppconn
 
 .PHONY:clean
 clean:

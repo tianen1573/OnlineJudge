@@ -1,0 +1,32 @@
+
+      <h2 class="ui image header">
+        <div class="content" style="margin-bottom: 10px; ">
+          登录
+        </div>
+      </h2>
+      <form class="ui large form" id="login" action="login.php" method="post" role="form" class="form-horizontal" onSubmit="return jsMd5();" >
+        <div class="ui existing segment">
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input name="user_id" placeholder="用户名" type="text" id="username">
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input name="password" placeholder="密码" type="password" id="password">
+            </div>
+          </div>
+                    <button name="submit" type="submit" class="ui fluid large submit button" >登录</button>
+        </div>
+
+        <div class="ui error message"></div>
+
+      </form>
+
+      <div class="ui message">
+        <a href="registerpage.php">注册账号</a>
+        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+        <!-- <a href="lostpassword.php">忘记密码</a> -->
+      </div>
