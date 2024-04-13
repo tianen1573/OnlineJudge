@@ -10,8 +10,7 @@
 #include "../comm/log.hpp"
 #include "../comm/util.hpp"
 #include "../include/mysqlInclude/mysql.h"
-#include "../comm/mysqlConnectPool.hpp"
-
+// #include "../comm/mysqlConnectPool.hpp"
 
 namespace ns_model
 {
@@ -23,13 +22,13 @@ namespace ns_model
     struct Question
     {
         std::string number; // 编号 unique
-        std::string title; // 标题
-        std::string star; // 难度
-        std::string desc; // 题目描述
+        std::string title;  // 标题
+        std::string star;   // 难度
+        std::string desc;   // 题目描述
         std::string header; // 题目预设代码
-        std::string tail; // 测试用例
-        int cpuLimit; // 时间限制 (s)
-        int memLimit; // 空间限制 (KB)
+        std::string tail;   // 测试用例
+        int cpuLimit;       // 时间限制 (s)
+        int memLimit;       // 空间限制 (KB)
     };
 
     const std::string ojQuestionsTable = "questions";
@@ -37,9 +36,9 @@ namespace ns_model
     class Model
     {
     public:
-        Model(){}
-        ~Model(){}
-        
+        Model() {}
+        ~Model() {}
+
         /**
          * @brief 查询sql
          * 
@@ -55,7 +54,7 @@ namespace ns_model
             const int port = 3306;
 
             // 连接数据库
-            if(nullptr == mysql_real_connect(my, host.c_str(), user.c_str(), passwd.c_str(), db.c_str(), port, nullptr, 0))
+            if (nullptr == mysql_real_connect(my, host.c_str(), user.c_str(), passwd.c_str(), db.c_str(), port, nullptr, 0))
             {
                 LOG(FATAL) << "连接数据库失败！\n";
                 return false;
@@ -66,7 +65,7 @@ namespace ns_model
             mysql_set_character_set(my, "utf8");
 
             // 执行查询语句
-            if(0 != mysql_query(my, sql.c_str()))
+            if (0 != mysql_query(my, sql.c_str()))
             {
                 LOG(WARNING) << sql << " execute error!\n";
                 return false;
@@ -78,10 +77,10 @@ namespace ns_model
             // 分析结果
             int rows = mysql_num_rows(res);
             int cols = mysql_num_fields(res);
-            for(int i = 0; i < rows; ++ i)
+            for (int i = 0; i < rows; ++i)
             {
                 // 提取数据
-                MYSQL_ROW curRow= mysql_fetch_row(res);
+                MYSQL_ROW curRow = mysql_fetch_row(res);
                 struct Question que;
                 que.number = curRow[0];
                 que.title = curRow[1];
@@ -122,15 +121,15 @@ namespace ns_model
             sql += " where number = ";
             sql += number;
             std::vector<Question> resl;
-            if(QueryMysql(sql, &resl))
+            if (QueryMysql(sql, &resl))
             {
-                if(resl.size() == 1)
+                if (resl.size() == 1)
                 {
                     *que = resl[0];
                     return true;
                 }
             }
-            
+
             return false;
         }
     };

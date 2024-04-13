@@ -4,6 +4,12 @@ compile_server:compile_server.cc
 .PHONY:clean
 clean:
 	rm -rf compile_server
+
+# .PHONY:static
+# static:
+# 	g++ -o compile_server -std=c++11 compile_server.cc -static -ljsoncpp -pthread
+
+
 # .PHONY:remove
 # remove:
 # 	rm -rf ./temp/*.exe
