@@ -33,6 +33,7 @@ namespace ns_compiler {
             * 
             */
             static bool Compile(const std::string &fileName) {
+
                 // 创建子进程，进行程序替换，提供编译功能
                 pid_t childPid = fork();
                 if(childPid < 0) { // 失败
@@ -45,9 +46,9 @@ namespace ns_compiler {
                     int fdStderr = open(PathUtil::BuildCompilerError(fileName).c_str(), O_CREAT | O_WRONLY, 0644);
                     if(fdStderr < 0) {
                         LOG(WARNING) << "生成compiler_error文件失败" << "\n";
-                        exit(1); // 打开失败
+                        exit(1); // 生成失败会导致run时打开失败
                     }
-                    dup2(fdStderr, 2);
+                    dup2(fdStderr, 2); // 重定向
 
                     // g++ -o target src -std=c++11
                     // COMPILER_ONLINE 传入宏用于取消包含头文件
@@ -66,12 +67,12 @@ namespace ns_compiler {
                      nullptr);
                     
                     LOG(ERROR) << "启动g++失败，请注意相关参数" << "\n";
-                    exit(2); // 直接退出
+                    exit(2); // 程序替换失，没有生成可执行程序
                 } else { // 父进程
                     waitpid(childPid, nullptr, 0);
 
                     // 如果编译成功了，则可执行程序是能够打开的，stat
-                    // 也可以通过g++的返回值，判断是否编译成功，进程通信
+                    // 或者通过获取子进程/g++的返回值，判断是否编译成功，进程通信
                     if(FileUtil::IsFileExists(PathUtil::BuildExe(fileName))) {
                         LOG(INFO) << "编译成功：" << PathUtil::BuildSrc(fileName) << "\n";
                         return true;

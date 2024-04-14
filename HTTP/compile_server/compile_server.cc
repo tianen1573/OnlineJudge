@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
     Server svr;
 
     // svr.set_base_dir("./wwwroot");
+    svr.set_keep_alive_max_count(10); // Default is 5
+    svr.set_keep_alive_timeout(10);  // Default is 5
 
     svr.Post("/compile_and_run", [](const Request &req, Response &resp)
              {

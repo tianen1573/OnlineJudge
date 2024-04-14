@@ -45,10 +45,11 @@ namespace ns_runner
         *  memLimit：内存资源上限 (KB)
         * 返回值：
         *  = 0 运行成功，结果正确/错误
-        *  > 0 运行失败，返回值代表错误信号
+        *  > 0 运行失败，返回值代表错误信号(触发信号)
         *  < 0 内部错误，程序没运行
         *       -1 无法打开标准文件
         *       -2 子进程创建失败，即程序根本没运行
+        *       -3 子进程替换失败，即程序根本没运行
         * 
         * Run只关心代码是否运行成功，不关心结果的对错
         * 结果对错，由其他代码判定
@@ -77,7 +78,7 @@ namespace ns_runner
                 LOG(ERROR) << "无法为程序打开标准文件\n";
                 return -1;
             }
-            // 子进程
+            // 创建子进程，进行进程替换
             pid_t childPid = fork();
             if (childPid < 0) // 失败
             {
@@ -98,7 +99,7 @@ namespace ns_runner
                 // LOG(INFO) << "SetRlimit\n";
                 // path, exe
                 execl(exePath.c_str(), exePath.c_str(), nullptr);
-                exit(1);
+                exit(1); // 走到这里代表替换失败
             }
             else // 父进程
             {
@@ -108,9 +109,36 @@ namespace ns_runner
 
                 int status = 0;
                 waitpid(childPid, &status, 0); // 阻塞等待
-                // 子进程运行状态存在status中
-                LOG(INFO) << "代码运行完毕，info：" << (status & 0x7f) << std::endl;
-                return status & 0x7f;
+                // 子进程正常结束
+                if (WIFEXITED(status))
+                {
+                    LOG(INFO) << "代码运行完毕，info：" << WEXITSTATUS(status) << std::endl;
+
+                    // 正常结束
+                    if(WEXITSTATUS(status) == 0)
+                    {
+                        return 0;
+                    }
+                    // 触发SIGALRM，当成触发 SIGXCPU
+                    else if(WEXITSTATUS(status) == SIGALRM)
+                    {
+                        return SIGXCPU;
+                    }
+                    // 子进程程序替换失败，即用户程序未能运行起来，当成未知错误
+                    else if(WEXITSTATUS(status) == 1)
+                    {
+                        return -3;
+                    }
+                    else
+                    {
+                        return WEXITSTATUS(status);
+                    }
+                }
+                else // 非正常结束
+                {
+                    LOG(INFO) << "代码运行完毕，info：" << WTERMSIG(status) << std::endl;
+                    return WTERMSIG(status);
+                }
             }
         }
     };

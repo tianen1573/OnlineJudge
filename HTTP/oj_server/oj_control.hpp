@@ -24,6 +24,23 @@ namespace ns_control
     using namespace ns_model;
     using namespace ns_view;
 
+    enum class Error
+    {
+        Success = 0,
+        Unknown,
+        Connection,
+        BindIPAddress,
+        Read,
+        Write,
+        ExceedRedirectCount,
+        Canceled,
+        SSLConnection,
+        SSLLoadingCerts,
+        SSLServerVerification,
+        UnsupportedMultipartBoundaryChars,
+        Compression,
+    };
+
     const std::string banCodePath = "questions/banCode.cpp";
     const std::string serviceMachinePath = "conf/service_machine.conf"; // oj_server/conf/service_machine.conf
     class Machine                                                       // 主机
@@ -317,19 +334,20 @@ namespace ns_control
             if (!_model.GetOneQuestion(number, &ques))
             {
                 LOG(ERROR) << "获取题目失败：" << number << std::endl;
-                if (!FileUtil::ReadFile("./wwwroot/404.html", html))
+                if (!FileUtil::ReadFile("./wwwroot/404_question.html", html))
                 {
                     *html = R"(<!DOCTYPE html> 
-                    <html lang="en">
-                    <head>
-                    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-                    <title>404 Not Found</title>
-                    </head>
-                    <body>
-                    <h1>404 Not Found</h1>
-                    <p>Sorry, the page you are looking for does not exist.</p>
-                    </body>
-                    </html>)";
+                                <html lang="en">
+                                <head>
+                                <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+                                <title>404 Not Found</title>
+                                </head>
+                                <body>
+                                <h1>404 Not Found</h1>
+                                <p>Sorry, the question you are looking for does not exist.</p>
+                                <p>Please check the question number or go back to the <a href="/">homepage</a>.</p>
+                                </body>
+                                </html>)";
                 }
                 return false;
             }
@@ -385,8 +403,12 @@ namespace ns_control
                 LOG(INFO) << "主机选择成功，主机：" << id << ":" << m->GetIp() << ":" << m->GetPort() << "，负载：" << m->GetLoad() << std::endl;
                 // 4. http请求
                 httplib::Client cli(m->GetIp(), m->GetPort());
+                // 设置IO的最大等待时间
+                cli.set_read_timeout(ques.cpuLimit * 3, 0);
+                cli.set_write_timeout(ques.cpuLimit * 3, 0);
                 m->IncLoad();
-                if (auto res = cli.Post("/compile_and_run", compileJson, "application/json"))
+                auto res = cli.Post("/compile_and_run", compileJson, "application/json");
+                if (res)
                 {
                     // 5. 返回结果
                     if (res->status == 200)
@@ -397,6 +419,19 @@ namespace ns_control
                         break;
                     }
                     m->DecLoad();
+                }
+                else if (res.error() == httplib::Error::Read || res.error() == httplib::Error::Write)
+                {
+                    // 网络IO出错时，编译服务不一定发生错误
+                    // 比如，用户提交的代码中存在sleep，会导致编译后的程序的存在时间(cpu+非cpu)大于上限时间
+                    // 进而，大于我们设置的网络IO最大等待时间，导致网络IO超时，post提前返回
+                    // 而此时编译服务还在执行程序，就会发生<<如错>>
+                    // 所以需要约定，网络IO的最大时间为cpuLinmit*3，而程序的存在时间为cpuLimit*2
+                    // 保证，在IO超时的前一刻，将用户的程序结束
+
+                    LOG(ERROR) << "当前主机已离线，主机ID：" << id << "，主机：" << m->GetIp() << ":" << m->GetPort() << std::endl;
+                    _loadBlance.OfflineMachine(id);
+                    _loadBlance.ShowMachines();
                 }
                 else
                 {

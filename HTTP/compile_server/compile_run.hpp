@@ -49,6 +49,7 @@ namespace ns_compile_and_run
                 desc = "未知错误：-4";
                 break;
             case SIGXCPU:
+            case SIGALRM:
                 desc = "时间超出限制";
                 break;
             case SIGABRT:
@@ -161,7 +162,7 @@ namespace ns_compile_and_run
             if (runRetVal < 0)
             {
                 // 内部错误
-                statusCode = -4; // 运行前失败，内部错误
+                statusCode = -4; // 未运行失败，内部错误
             }
             else if (runRetVal > 0)
             {
