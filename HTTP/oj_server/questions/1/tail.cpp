@@ -16,11 +16,11 @@ void Test1()
     int ret = Solution().sum(1, 1);
     if (2 == ret)
     {
-        std::cout << "用例1通过，测试用例：1, 1" << std::endl;
+        std::cout << "用例1<span style = \"color:#2DB55D\">通过</span>，测试用例：1, 1<br>" << std::endl;
     }
     else
     {
-        std::cout << "用例1未通过，测试用例：1, 1" << std::endl;
+        std::cout << "用例1<span style = \"color:#EF4743\">未通过</span>，测试用例：1, 1<br>" << std::endl;
     }
 }
 void Test2()
@@ -28,11 +28,11 @@ void Test2()
     int ret = Solution().sum(-1, 1);
     if (0 == ret)
     {
-        std::cout << "用例2通过，测试用例：-1, 1" << std::endl;
+        std::cout << "用例2<span style = \"color:#2DB55D\">通过</span>，测试用例：-1, 1<br>" << std::endl;
     }
     else
     {
-        std::cout << "用例2未通过，测试用例：-1, 1" << std::endl;
+        std::cout << "用例2<span style = \"color:#EF4743\">未通过</span>，测试用例：-1, 1<br>" << std::endl;
     }
 }
 

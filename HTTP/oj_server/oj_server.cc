@@ -48,7 +48,7 @@ int main()
              {
                  std::string number = req.matches[1]; // 能够获取到正则表达式\d+的内容
                  std::string resultJson;
-                 std::cout << req.body << std::endl;
+                 //  std::cout << req.body << std::endl;
                  ctrl.Judge(number, req.body, &resultJson);
                  resp.set_content(resultJson, "application/json; charset=utf-8");
              });
@@ -81,10 +81,32 @@ int main()
                               }
                               res.set_content(html, "text/html");
                           });
+    // 5. 登录功能
+    svr.Post("/login", [](const Request &req, Response &resp)
+             {
+                 std::cout << req.body << std::endl;
+                 std::string html;
+                 if (!FileUtil::ReadFile("./wwwroot/404.html", &html))
+                 {
+                     html = R"(<!DOCTYPE html> 
+                                            <html lang="en">
+                                            <head>
+                                            <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+                                            <title>ERR</title>
+                                            </head>
+                                            <body>
+                                            <h1>ERR</h1>
+                                            <p>Sorry, the page you are looking for does not exist.</p>
+                                            <p>Please check the URL or go back to the <a href="/">homepage</a>.</p>
+                                            </body>
+                                            </html>)";
+                 }
+                 resp.set_content(html, "text");
+             });
 
     svr.set_base_dir("./wwwroot");
-    svr.set_keep_alive_max_count(50); // Default is 5
-    svr.set_keep_alive_timeout(10);  // Default is 5
+    svr.set_keep_alive_max_count(10); // Default is 5
+    svr.set_keep_alive_timeout(10);   // Default is 5
 
     svr.listen("0.0.0.0", 8084);
 

@@ -406,6 +406,8 @@ namespace ns_control
                 // 设置IO的最大等待时间
                 cli.set_read_timeout(ques.cpuLimit * 3, 0);
                 cli.set_write_timeout(ques.cpuLimit * 3, 0);
+                // 编译服务只需要一次http，关闭长连接
+                cli.set_keep_alive(false);
                 m->IncLoad();
                 auto res = cli.Post("/compile_and_run", compileJson, "application/json");
                 if (res)

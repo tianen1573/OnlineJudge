@@ -1,32 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-      <h2 class="ui image header">
-        <div class="content" style="margin-bottom: 10px; ">
-          登录
-        </div>
-      </h2>
-      <form class="ui large form" id="login" action="login.php" method="post" role="form" class="form-horizontal" onSubmit="return jsMd5();" >
-        <div class="ui existing segment">
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="user icon"></i>
-              <input name="user_id" placeholder="用户名" type="text" id="username">
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="lock icon"></i>
-              <input name="password" placeholder="密码" type="password" id="password">
-            </div>
-          </div>
-                    <button name="submit" type="submit" class="ui fluid large submit button" >登录</button>
-        </div>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
 
-        <div class="ui error message"></div>
+        /* 将导航栏和游览器周围取消贴合 */
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #232425;
+        }
 
-      </form>
+        /* 开始设置导航栏 */
+        /* 不要紧紧挨在一起 */
+        .header {
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+        }
 
-      <div class="ui message">
-        <a href="registerpage.php">注册账号</a>
-        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-        <!-- <a href="lostpassword.php">忘记密码</a> -->
-      </div>
+        .header {
+            /* 设置导航栏的背景颜色 */
+            background-color: #2f3233;
+            /* 文本颜色 */
+            color: #fff;
+            /* 设置内边距 */
+            padding: 20px;
+        }
+        
+        nav ul {
+            /* 导航栏使用横向排列 */
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        
+        nav ul .left {
+            /* 导航栏链接之间的右边距 */
+            margin-right: 20px;
+        }
+
+        nav ul .left {
+            /* 导航栏链接之间的右边距 */
+            margin-right: 30px;
+        }
+        
+        nav ul li a {
+            color: #fff;
+            font-size: 2.0ch;
+            /* 去除下划线 */
+            text-decoration: none;
+        }
+        
+        nav ul li a:hover {
+            /* 鼠标悬停的时候, 链接下面有下划线效果 */
+            text-decoration: underline;
+        }
+
+
+        /* 设置左边距 */
+        form {
+            padding-left: 480px;
+        }
+
+        h1 {
+            color: rgb(255, 98, 0); /* 设置标题颜色为黄色 */
+            font-size: 36px; /* 设置标题字体大小为36像素 */
+            text-align: center;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        textarea,
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <title>题目录入页面</title>
+</head>
+<body>
+    <div class="header">
+        <!-- 设置导航部分 ------------------------------------------------------------------------------------- -->
+        <nav>
+            <ul>
+                <li class="left"><i class="fas fa-graduation-cap"></i><a href="/" style="margin-left: 15px;">首页</a></li>
+                <li class="left"><a href="/list" style="color: yellow;">题库</a></li>
+                <li class="left"><a href="#">竞赛</a></li>
+                <li class="left"><a href="#">讨论</a></li>
+                <li class="left"><a href="#">求职</a></li>
+
+                <li class="login" style="margin-left: auto;"><a href="login_and_reg.html">登录&nbsp</a></li>
+            </ul>
+        </nav>
+        <!-- 导航栏结束 --------------------------------------------------------------------------------------- -->
+    </div>
+
+    <h1 style="color: white">录题</h1>
+
+    <!-- 以下就是 若干个 选项了，前面 3 个是单选，后面 1 个是多选 -->
+    <form onsubmit="event.preventDefault(); submitForm()">
+        <h3>1. 标题</h2>
+        <input type="text" id="title" name="title" required>
+
+        <h3>2. 难度</h2>
+        <select id="difficulty" name="difficulty" required>
+            <option value="简单">简单</option>
+            <option value="中等">中等</option>
+            <option value="困难">困难</option>
+        </select>
+
+        <h3>3. 题目描述</h2>
+        <textarea id="description" name="description" rows="5" required></textarea>
+
+        <h3>4. 预代码（展示给用户的代码）</h2>
+        <textarea id="pre_code" name="pre_code" rows="5" required></textarea>
+
+        <h3>5. 用户执行代码（测试代码）</h2>
+        <textarea id="test_code" name="test_code" rows="5" required></textarea>
+        <br>
+        <input type="submit" value="提交">
+    </form>
+
+    <script>
+        function submitForm() {
+            var title = document.getElementById("title").value;
+            var difficulty = document.getElementById("difficulty").value;
+            var desc = document.getElementById("description").value;
+            var pre_code = document.getElementById("pre_code").value;
+            var test_code = document.getElementById("test_code").value;
+
+            jQuery.ajax({
+                method: "Post",
+                url:"/entry",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    "title": title,
+                    "difficulty": difficulty,
+                    "desc": desc,
+                    "pre_code": pre_code,
+                    "test_code": test_code
+                }),
+                success:function(result) {
+                    console.log(result);
+                    if (result.status == 200 && result.data == -100) {
+                        alert("权限不够");
+                        location.href = "./login_and_reg.html";
+                        return ;
+                    }
+
+                    if (result.status == 200 && result.data == 0) {             // 录入题目成功
+                        alert(result.msg);
+                    } else if (result.status == 200 && result.data == -1) {     // 录入题目时发生未知错误
+                        alert(result.msg);
+                    } else {
+                        alert(result.msg);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
